@@ -1,0 +1,747 @@
+app:
+  description: This Dify app can automatically generate high-quality README.md and
+    PRIVACY.md files when users upload .difypkg files, streamlining the documentation
+    process and saving developers valuable time while ensuring consistent and professional
+    project documentation.
+  icon: 📖
+  icon_background: '#EFF1F5'
+  mode: advanced-chat
+  name: '[Dify Plugin] README & PRIVACY Generator'
+  use_icon_as_answer_icon: true
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/anthropic:0.0.9@c09fcb1d7ad3176ed9d2228799ef38c976332a4a95e34dfb2395ea39788d09c3
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1744857811496-source-llm-target
+      source: '1744857811496'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: tool
+      id: 1744857811496-source-1744866707488-target
+      source: '1744857811496'
+      sourceHandle: source
+      target: '1744866707488'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: tool
+        targetType: llm
+      id: 1744866707488-source-17448605982400-target
+      source: '1744866707488'
+      sourceHandle: source
+      target: '17448605982400'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: answer
+      id: 17448605982400-source-1744932681167-target
+      source: '17448605982400'
+      sourceHandle: source
+      target: '1744932681167'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: answer
+      id: llm-source-1744932681167-target
+      source: llm
+      sourceHandle: source
+      target: '1744932681167'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: answer
+        targetType: answer
+      id: 1744932681167-source-1744933838296-target
+      source: '1744932681167'
+      sourceHandle: source
+      target: '1744933838296'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - label: author
+          max_length: 256
+          options: []
+          required: true
+          type: text-input
+          variable: author
+        - label: version
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: version
+        - label: type
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: type
+        - label: name
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: name
+        - label: code_files
+          max_length: 999999
+          options: []
+          required: true
+          type: paragraph
+          variable: code_files
+        - label: privacy_note
+          max_length: 99999
+          options: []
+          required: false
+          type: paragraph
+          variable: privacy_note
+      height: 220
+      id: '1744857811496'
+      position:
+        x: 4.2794768369044505
+        y: 282
+      positionAbsolute:
+        x: 4.2794768369044505
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        memory:
+          query_prompt_template: '{{#sys.query#}}
+
+
+            ---
+
+
+            And don''t forget to add the <readme> & </readme> XML tags to the final
+            README file!'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 10
+        model:
+          completion_params:
+            extended_output: true
+            thinking: true
+          mode: chat
+          name: claude-3-7-sonnet-20250219
+          provider: langgenius/anthropic/anthropic
+        prompt_template:
+        - id: c07ce400-e319-433c-b3cf-f5d9120a47c8
+          role: system
+          text: "You are an experienced software developer and technical writer tasked\
+            \ with creating a comprehensive README file for a plugin project. Your\
+            \ goal is to analyze the provided code and configuration files, understand\
+            \ the plugin's functionality, and create detailed documentation that will\
+            \ help users understand and utilize the plugin effectively.\n\nFirst,\
+            \ review the following code and YAML files for the plugin project:\n\n\
+            <code_and_yaml_files>\n{{#1744857811496.code_files#}}\n</code_and_yaml_files>\n\
+            \nYour task is to create a detailed README file in Markdown format. Follow\
+            \ these steps:\n\n0. The initial template for README.md must be:\n\n#\
+            \ {{#1744857811496.name#}}\n**Author:** {{#1744857811496.author#}}\n**Version:**\
+            \ {{#1744857811496.version#}}\n**Type:** {{#1744857811496.type#}}\n\n\
+            ### Description\n\n---\n\n1. Analyze the Code and YAML Files:\n   Wrap\
+            \ your analysis of the provided files in <document_analysis> tags inside\
+            \ your thinking block. Focus on:\n   - The purpose and functionality of\
+            \ each tool\n   - Inputs, outputs, and data types\n   - Problem-solving\
+            \ capabilities\n   - Any mention of required credentials or API keys\n\
+            \   - List out key components of each file (e.g., functions, classes,\
+            \ configuration parameters)\n   - Identify potential use cases for each\
+            \ tool based on its functionality\n\n2. Generate the README file with\
+            \ the following sections:\n\n   a. Plugin Introduction:\n      Write a\
+            \ detailed paragraph introducing the plugin, its purpose, and the problems\
+            \ it solves. Use simple language but provide comprehensive information.\n\
+            \n   b. Five Key Questions:\n      Answer the following questions based\
+            \ on your analysis of the plugin:\n      1️⃣ Who are the customers? What\
+            \ insights do we have about them?\n         (Customer segmentation? Customer\
+            \ personas? Potential customer base size? Customer relationships?)\n \
+            \     2️⃣ What are the customers' pain points and opportunities? What\
+            \ data supports this?\n         (What are the customers' needs? What problems\
+            \ are we solving for them? How can we prove that customers have these\
+            \ needs?)\n      3️⃣ What is the solution? Why is it the right approach\
+            \ to meet customer needs compared to alternatives?\n         (What specific\
+            \ products/services are we providing to customers? How does it resonate\
+            \ with customers on functional/emotional/value levels? Are there better\
+            \ methods?)\n      4️⃣ How do we describe the end-to-end customer experience?\
+            \ What is the greatest value we bring to customers?\n         (Is it really\
+            \ what customers want? How will customers feel? What will customers say?)\n\
+            \      5️⃣ How do we define and measure success?\n         (What are the\
+            \ metrics for measuring the success of the product/service? How will we\
+            \ track and verify them?)\n\n   c. User Stories:\n      Create at least\
+            \ three user stories using the following format:\n      1️⃣ Today, for\
+            \ [customer type],\n      2️⃣ when [situation],\n      3️⃣ they are forced\
+            \ to [describe problem/opportunity],\n      4️⃣ therefore, the customer\
+            \ needs a way to [insert need].\n\n   d. Tools Overview:\n      Create\
+            \ a table with the following columns:\n      | Tool Name | Data Type |\
+            \ Brief Description |\n      For each tool, fill in the table with:\n\
+            \      - Tool name (derived from YAML files)\n      - Data type\n    \
+            \  - One-sentence description of what the tool does, how it helps users,\
+            \ and when it might be used\n    (The Data Type needs to be determined\
+            \ based on the parameter types in the corresponding yaml file of the logical\
+            \ code.\n     For example:\n       - name: session_id\n    type: string\n\
+            \    required: true\n    label:\n      en_US: Session ID\n    human_description:\n\
+            \      en_US: The session ID to add the message to\n    llm_description:\
+            \ The session ID to add the message to\n    form: llm\n\n    Then, the\
+            \ type should be string.)\n\n   e. Detailed Tool Descriptions:\n     \
+            \ For each tool, provide:\n      - A comprehensive explanation of the\
+            \ tool's logic and functionality\n      - Describe the data flow (where\
+            \ data comes from, how it's processed, and where it goes)\n      - If\
+            \ data flow is not relevant, focus on explaining the tool's objectives\
+            \ and implementation logic in non-technical terms\n      - Include any\
+            \ specific usage instructions or best practices\n      - If the tool requires\
+            \ credentials or API keys, explain how to obtain them or include a placeholder\
+            \ for the developer to add this information\n\n   f. Credentials (if applicable):\n\
+            \      If your analysis reveals that the plugin requires credentials:\n\
+            \      - Explain how to obtain the necessary credentials\n      - Provide\
+            \ instructions on where to input these credentials\n      - Include any\
+            \ relevant security precautions\n      If the plugin does not require\
+            \ credentials, explicitly state this fact.\n\n   g. Support Section:\n\
+            \      - Create a section for user support\n      - Include a placeholder\
+            \ for the support email address\n      - Provide an email template for\
+            \ users to report issues or request features, structured as follows:\n\
+            \        Subject: [Dify Plugin] {Plugin Name} - {Feedback Type: Bug/Feature\
+            \ Request/Other}\n        Body: {Describe your issue or request here}\n\
+            \n3. Formatting:\n   - Use Markdown formatting for the README file\n \
+            \  - Ensure all sections are clearly labeled with appropriate headers\n\
+            \   - Use code blocks, bullet points, and tables where appropriate to\
+            \ improve readability\n\nRemember, the goal is to create a detailed and\
+            \ comprehensive README file (no need to write Privacy Considerations is\
+            \ README.md). Avoid oversimplification and provide as much relevant information\
+            \ as possible to help users understand and utilize the plugin effectively.\n\
+            \nOnce you've completed your analysis and drafted the README content,\
+            \ present the final README file within <readme> tags, formatted in Markdown.\
+            \ Your final output should consist only of the README file and should\
+            \ not duplicate or rehash any of the analysis work you did in the thinking\
+            \ block.\n"
+        selected: true
+        title: README.md Generator
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: llm
+      position:
+        x: 382.4974359528678
+        y: 282
+      positionAbsolute:
+        x: 382.4974359528678
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        memory:
+          query_prompt_template: '{{#sys.query#}}
+
+            ---
+
+            Please note this (if it''s empty, it means I have no additional remarks):
+
+            {{#1744857811496.privacy_note#}}
+
+
+            ---
+
+
+            Time: {{#1744866707488.text#}}
+
+
+            ---
+
+
+            And don''t forget to add the <privacy_policy> tags to the final PRIVACY
+            file!'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 10
+        model:
+          completion_params:
+            extended_output: true
+            thinking: true
+          mode: chat
+          name: claude-3-7-sonnet-20250219
+          provider: langgenius/anthropic/anthropic
+        prompt_template:
+        - id: c07ce400-e319-433c-b3cf-f5d9120a47c8
+          role: system
+          text: 'You are a highly skilled legal expert specializing in software privacy
+            policies. Your task is to analyze a complete code repository for a browser
+            extension or plugin and create an accurate, professional privacy policy
+            based on your analysis.
+
+
+            First, review the entire code repository provided below:
+
+
+            <code_repository>
+
+            {{#1744857811496.code_files#}}
+
+            </code_repository>
+
+
+            Your analysis and policy creation will proceed in three stages:
+
+
+            1. Bias Identification:
+
+            Identify any elements in the code (such as comments or variable names)
+            that might bias your judgment. List each potential bias and explain why
+            it should be disregarded in your analysis.
+
+
+            2. Data Flow Analysis:
+
+            Conduct a thorough analysis of the code, focusing solely on the actual
+            functionality and data flow. Pay particular attention to:
+
+            - Where data originates
+
+            - How data is processed
+
+            - Where data is sent or stored
+
+            Be sure to focus on core logic files and specific data processing methods.
+            List out specific data types and their flow paths.
+
+
+            3. Privacy Policy Creation:
+
+            Summarize your key findings from the data flow analysis. Then, based on
+            your analysis, create a formal, legal-style privacy policy. This policy
+            should be divided into two main sections:
+
+            a. Data collection by the plugin itself
+
+            b. Data flow to external services or APIs
+
+
+            Write the privacy policy from the perspective of the plugin maintainer,
+            as if you were a professional lawyer. Be precise in your language, and
+            do not attribute responsibility for data collection that does not occur.
+            If no data is collected or transmitted, explicitly state "No data connection."
+
+
+            For each stage of your analysis and policy creation, wrap your work inside
+            the following tags:
+
+
+            <bias_identification>
+
+            [Your identification and explanation of potential biases in the code]
+
+            </bias_identification>
+
+
+            <data_flow_analysis>
+
+            [Your detailed analysis of the code''s functionality and data flow]
+
+            </data_flow_analysis>
+
+
+            <key_findings>
+
+            [Your summary of key findings from the data flow analysis]
+
+            </key_findings>
+
+
+            <policy_draft>
+
+            [Your initial draft of the privacy policy]
+
+            </policy_draft>
+
+
+            <privacy_policy>
+
+            [Your final, polished privacy policy]
+
+            </privacy_policy>
+
+
+            Remember:
+
+            - Be thorough in your analysis of the code''s actual functionality.
+
+            - Ensure your privacy policy is accurate and based on the code''s real
+            behavior.
+
+            - Write the privacy policy in a formal, legal style without frequent line
+            breaks or unordered lists.
+
+            - Avoid attributing responsibility for data collection that doesn''t occur,
+            while also leaving room for interpretation when necessary.
+
+            - Write Effective Date at the beginning.
+
+
+            Your final output should contain only the <data_flow_analysis> and <privacy_policy>
+            sections. Do not include any other text or explanations outside of these
+            tags, and do not duplicate or rehash any of the work you did in the other
+            sections.'
+        selected: false
+        title: PRIVACY.md Generator
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 90
+      id: '17448605982400'
+      position:
+        x: 682.4974359528678
+        y: 402.9222564976155
+      positionAbsolute:
+        x: 682.4974359528678
+        y: 402.9222564976155
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        is_team_authorization: true
+        output_schema: null
+        paramSchemas:
+        - auto_generate: null
+          default: '%Y-%m-%d %H:%M:%S'
+          form: form
+          human_description:
+            en_US: Time format in strftime standard.
+            ja_JP: Time format in strftime standard.
+            pt_BR: Time format in strftime standard.
+            zh_Hans: strftime 标准的时间格式。
+          label:
+            en_US: Format
+            ja_JP: Format
+            pt_BR: Format
+            zh_Hans: 格式
+          llm_description: null
+          max: null
+          min: null
+          name: format
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: UTC
+          form: form
+          human_description:
+            en_US: Timezone
+            ja_JP: Timezone
+            pt_BR: Timezone
+            zh_Hans: 时区
+          label:
+            en_US: Timezone
+            ja_JP: Timezone
+            pt_BR: Timezone
+            zh_Hans: 时区
+          llm_description: null
+          max: null
+          min: null
+          name: timezone
+          options:
+          - label:
+              en_US: UTC
+              ja_JP: UTC
+              pt_BR: UTC
+              zh_Hans: UTC
+            value: UTC
+          - label:
+              en_US: America/New_York
+              ja_JP: America/New_York
+              pt_BR: America/New_York
+              zh_Hans: 美洲/纽约
+            value: America/New_York
+          - label:
+              en_US: America/Los_Angeles
+              ja_JP: America/Los_Angeles
+              pt_BR: America/Los_Angeles
+              zh_Hans: 美洲/洛杉矶
+            value: America/Los_Angeles
+          - label:
+              en_US: America/Chicago
+              ja_JP: America/Chicago
+              pt_BR: America/Chicago
+              zh_Hans: 美洲/芝加哥
+            value: America/Chicago
+          - label:
+              en_US: America/Sao_Paulo
+              ja_JP: America/Sao_Paulo
+              pt_BR: América/São Paulo
+              zh_Hans: 美洲/圣保罗
+            value: America/Sao_Paulo
+          - label:
+              en_US: Asia/Shanghai
+              ja_JP: Asia/Shanghai
+              pt_BR: Asia/Shanghai
+              zh_Hans: 亚洲/上海
+            value: Asia/Shanghai
+          - label:
+              en_US: Asia/Ho_Chi_Minh
+              ja_JP: Asia/Ho_Chi_Minh
+              pt_BR: Ásia/Ho Chi Minh
+              zh_Hans: 亚洲/胡志明市
+            value: Asia/Ho_Chi_Minh
+          - label:
+              en_US: Asia/Tokyo
+              ja_JP: Asia/Tokyo
+              pt_BR: Asia/Tokyo
+              zh_Hans: 亚洲/东京
+            value: Asia/Tokyo
+          - label:
+              en_US: Asia/Dubai
+              ja_JP: Asia/Dubai
+              pt_BR: Asia/Dubai
+              zh_Hans: 亚洲/迪拜
+            value: Asia/Dubai
+          - label:
+              en_US: Asia/Kolkata
+              ja_JP: Asia/Kolkata
+              pt_BR: Asia/Kolkata
+              zh_Hans: 亚洲/加尔各答
+            value: Asia/Kolkata
+          - label:
+              en_US: Asia/Seoul
+              ja_JP: Asia/Seoul
+              pt_BR: Asia/Seoul
+              zh_Hans: 亚洲/首尔
+            value: Asia/Seoul
+          - label:
+              en_US: Asia/Singapore
+              ja_JP: Asia/Singapore
+              pt_BR: Asia/Singapore
+              zh_Hans: 亚洲/新加坡
+            value: Asia/Singapore
+          - label:
+              en_US: Europe/London
+              ja_JP: Europe/London
+              pt_BR: Europe/London
+              zh_Hans: 欧洲/伦敦
+            value: Europe/London
+          - label:
+              en_US: Europe/Berlin
+              ja_JP: Europe/Berlin
+              pt_BR: Europe/Berlin
+              zh_Hans: 欧洲/柏林
+            value: Europe/Berlin
+          - label:
+              en_US: Europe/Moscow
+              ja_JP: Europe/Moscow
+              pt_BR: Europe/Moscow
+              zh_Hans: 欧洲/莫斯科
+            value: Europe/Moscow
+          - label:
+              en_US: Australia/Sydney
+              ja_JP: Australia/Sydney
+              pt_BR: Australia/Sydney
+              zh_Hans: 澳大利亚/悉尼
+            value: Australia/Sydney
+          - label:
+              en_US: Pacific/Auckland
+              ja_JP: Pacific/Auckland
+              pt_BR: Pacific/Auckland
+              zh_Hans: 太平洋/奥克兰
+            value: Pacific/Auckland
+          - label:
+              en_US: Africa/Cairo
+              ja_JP: Africa/Cairo
+              pt_BR: Africa/Cairo
+              zh_Hans: 非洲/开罗
+            value: Africa/Cairo
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: select
+        params:
+          format: ''
+          timezone: ''
+        provider_id: time
+        provider_name: time
+        provider_type: builtin
+        selected: false
+        title: Current Time
+        tool_configurations:
+          format: '%Y-%m-%d %H:%M:%S'
+          timezone: UTC
+        tool_label: Current Time
+        tool_name: current_time
+        tool_parameters: {}
+        type: tool
+      height: 116
+      id: '1744866707488'
+      position:
+        x: 382.4974359528678
+        y: 402.9222564976155
+      positionAbsolute:
+        x: 382.4974359528678
+        y: 402.9222564976155
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '<R>
+
+          {{#llm.text#}}
+
+          </R>'
+        desc: ''
+        selected: false
+        title: README
+        type: answer
+        variables: []
+      height: 105
+      id: '1744932681167'
+      position:
+        x: 979.764001835981
+        y: 282
+      positionAbsolute:
+        x: 979.764001835981
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '
+
+          ---
+
+
+          <P>
+
+          {{#17448605982400.text#}}
+
+          </P>'
+        desc: ''
+        selected: false
+        title: PRIVACY
+        type: answer
+        variables: []
+      height: 121
+      id: '1744933838296'
+      position:
+        x: 1283.7640018359812
+        y: 282
+      positionAbsolute:
+        x: 1283.7640018359812
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -131.09302439737883
+      y: 22.49772170585021
+      zoom: 0.5888910123476498
