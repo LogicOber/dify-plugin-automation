@@ -1,3 +1,5 @@
+![Dify Plugin Helper](./assets/cover.png)
+
 # Dify Plugin Helper - v0.0.2
 
 This repository contains tools to assist with Dify plugin development. Currently, it features an assistant that automatically generates `README.md` and `PRIVACY.md` files for your Dify plugin projects. Future updates will introduce more helper functionalities.
