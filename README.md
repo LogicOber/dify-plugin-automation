@@ -52,20 +52,17 @@ This repository contains tools to assist with Dify plugin development. Currently
 2. **Enter Plugin Path:**
    The script will prompt you to enter the path to your Dify plugin's root directory.
 
-    **Important:** Provide the path to your plugin's source code directory (the one containing `plugin.yaml`), *not* a packaged `.dify-pkg` file. Press Enter after typing the path.
+   **Important:** Provide the path to your plugin's source code directory (the one containing `plugin.yaml`), *not* a packaged `.dify-pkg` file. Press Enter after typing the path.
+3. **Enter Optional Prompts (Optional):**
+   The script will then ask for any additional instructions or prompts you want to give to the language model.
 
-3.  **Enter Optional Prompts (Optional):**
-    The script will then ask for any additional instructions or prompts you want to give to the language model.
-
-    If you have specific requirements for the README or Privacy Policy content, you can type them here. If not, simply press Enter to skip this step.
-
-1. **Generation and Output:**
+   If you have specific requirements for the README or Privacy Policy content, you can type them here. If not, simply press Enter to skip this step.
+4. **Generation and Output:**
    The script will now communicate with the Dify API to generate the `README.md` and `PRIVACY.md` files. Upon completion, you'll see status messages, and the generated files will be automatically copied into the plugin directory path you provided in Step 2.
 
 ## Contributor
 
-* **Lyson Ober**
-  * X (Twitter): [https://x.com/lyson_ober](https://x.com/lyson_ober)
+* **Lyson Ober** - X (Twitter): [https://x.com/lyson_ober](https://x.com/lyson_ober)
 
 ## Future Development
 
