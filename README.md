@@ -13,7 +13,7 @@ This repository contains tools to assist with Dify plugin development. Currently
 1. **Clone the Repository:**
 
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/LogicOber/dify-plugin-automation.git
    cd dify-plugin-helper
    ```
 2. **Install Dependencies:**
